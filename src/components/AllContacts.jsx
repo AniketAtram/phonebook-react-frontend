@@ -1,6 +1,13 @@
-import { Link } from "react-router-dom"
-import phoneNumbers from '../assets/phoneNumbers'
+import { Link } from "react-router-dom";
+import phoneNumbers from '../assets/phoneNumbers';
+import useContacts from "../hooks/useContacts";
 export default function AllContacts() {
+
+  const { contacts, loading, error, deleteContact } = useContacts();
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching contacts: {error.message}</p>;
+
   return (
     <>
       <div className="container-fluid mt-4">
@@ -16,7 +23,7 @@ export default function AllContacts() {
             </tr>
           </thead>
           <tbody>
-            {phoneNumbers.map(contact => (
+            {contacts?.map(contact => (
               <tr key={contact?.id}>
                 <td>{contact?.first_name}</td>
                 <td>{contact?.last_name}</td>
