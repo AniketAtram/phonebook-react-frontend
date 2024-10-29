@@ -1,7 +1,7 @@
 // src/components/ContactFormModal.jsx
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-const ContactFormModal = ({ show, title, contact, buttonText, onClose, onSubmit }) => {
+const ContactFormModal = ({ show, title, contact, buttonText, onClose, onCreate, onUpdate }) => {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -36,9 +36,18 @@ const ContactFormModal = ({ show, title, contact, buttonText, onClose, onSubmit 
   };
 
   // Handle form submission
-  const handleSubmit = () => {
-    onSubmit(formData);
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      if (buttonText === 'Update') {
+        // eslint-disable-next-line react/prop-types
+        await onUpdate(contact?.id, { user: formData });
+      } else if (buttonText === 'Create') {
+        await onCreate({ user: formData });
+      }
+      onClose(); // Close modal after action
+    } catch (error) {
+      console.error('Failed to submit form:', error);
+    }
   };
 
   return (
@@ -122,7 +131,8 @@ ContactFormModal.propTypes = {
   }),
   buttonText: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default ContactFormModal;

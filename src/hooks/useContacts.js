@@ -32,7 +32,7 @@ const useContacts = () => {
     setLoading(true);
     try {
       const response = await axios.post('/api/v1/users', newContact);
-      setContacts([...contacts, response?.data?.users]);
+      setContacts(response?.data?.users);
       setError(null); // Clear any previous errors
       return response.data;
     } catch (err) {
@@ -48,7 +48,7 @@ const useContacts = () => {
     setLoading(true);
     try {
       const response = await axios.put(`/api/v1/users/${id}`, updatedContact);
-      setContacts(contacts.map(contact => (contact.id === id ? response?.data?.users : contact)));
+      setContacts(response?.data?.users);
       setError(null); // Clear any previous errors
       return response.data;
     } catch (err) {

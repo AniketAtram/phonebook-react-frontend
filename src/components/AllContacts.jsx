@@ -3,7 +3,7 @@ import useContacts from "../hooks/useContacts";
 import ContactFormModal from './ContactFormModal';
 export default function AllContacts() {
 
-  const { contacts, loading, error } = useContacts();
+  const { contacts, loading, error, createContact, updateContact, deleteContact } = useContacts();
   const [modalConfig, setModalConfig] = useState({
     show: false,
     title: '',
@@ -39,10 +39,17 @@ export default function AllContacts() {
     });
   };
 
-  // Handle form submission
-  const handleFormSubmit = (formData) => {
-    console.log(`${modalConfig.buttonText} Contact:`, formData);
-    // Logic for creating or updating the contact goes here
+  // Handle contact deletion
+  const handleDeleteClick = async (contactId) => {
+    if (window.confirm("Are you sure you want to delete this contact?")) {
+      try {
+        await deleteContact(contactId);
+        // alert("Contact deleted successfully.");
+      } catch (error) {
+        console.error("Failed to delete contact:", error);
+        alert("An error occurred while trying to delete the contact.");
+      }
+    }
   };
 
   if (loading) return <p>Loading...</p>;
@@ -77,6 +84,9 @@ export default function AllContacts() {
                   <button onClick={() => handleEditClick(contact)} className="btn btn-warning btn-sm">
                     Edit
                   </button>
+                  <button onClick={() => handleDeleteClick(contact.id)} className="btn btn-danger btn-sm mx-2">
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
@@ -85,12 +95,13 @@ export default function AllContacts() {
       </div>
 
       <ContactFormModal
-        show={modalConfig.show}
-        title={modalConfig.title}
-        contact={modalConfig.contact}
-        buttonText={modalConfig.buttonText}
+        show={modalConfig?.show}
+        title={modalConfig?.title}
+        contact={modalConfig?.contact}
+        buttonText={modalConfig?.buttonText}
         onClose={handleCloseModal}
-        onSubmit={handleFormSubmit}
+        onCreate={createContact}
+        onUpdate={updateContact}
       />
     </>
   )
