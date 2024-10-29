@@ -1,6 +1,7 @@
 // src/components/ContactFormModal.jsx
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
 const ContactFormModal = ({ show, title, contact, buttonText, onClose, onCreate, onUpdate }) => {
   const [formData, setFormData] = useState({
     first_name: '',
@@ -41,12 +42,14 @@ const ContactFormModal = ({ show, title, contact, buttonText, onClose, onCreate,
       if (buttonText === 'Update') {
         // eslint-disable-next-line react/prop-types
         await onUpdate(contact?.id, { user: formData });
+        toast.success("Contact updated successfully!");
       } else if (buttonText === 'Create') {
         await onCreate({ user: formData });
+        toast.success("Contact created successfully!");
       }
       onClose(); // Close modal after action
     } catch (error) {
-      console.error('Failed to submit form:', error);
+      toast.error('Failed to submit form:', error);
     }
   };
 

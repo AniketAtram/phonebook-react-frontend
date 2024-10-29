@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import useContacts from "../hooks/useContacts";
 import ContactFormModal from './ContactFormModal';
 export default function AllContacts() {
@@ -44,16 +45,16 @@ export default function AllContacts() {
     if (window.confirm("Are you sure you want to delete this contact?")) {
       try {
         await deleteContact(contactId);
-        // alert("Contact deleted successfully.");
+        toast.success("Contact deleted successfully!");
       } catch (error) {
-        console.error("Failed to delete contact:", error);
-        alert("An error occurred while trying to delete the contact.");
+        toast.error("Failed to delete contact:", error);
+        // alert("An error occurred while trying to delete the contact.");
       }
     }
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error fetching contacts: {error.message}</p>;
+  // if (error) return <p>Error fetching contacts: {error.message}</p>;
 
   return (
     <>
