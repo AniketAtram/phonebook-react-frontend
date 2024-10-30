@@ -4,7 +4,7 @@ import useContacts from "../hooks/useContacts";
 import ContactFormModal from './ContactFormModal';
 export default function AllContacts() {
 
-  const { contacts, loading, error, createContact, updateContact, deleteContact } = useContacts();
+  const { contacts, loading, createContact, updateContact, deleteContact } = useContacts();
   const [modalConfig, setModalConfig] = useState({
     show: false,
     title: '',
